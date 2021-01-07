@@ -27,12 +27,14 @@ class BBoxUtility(object):
         self.overlap_threshold = overlap_threshold
         self._nms_thresh = nms_thresh
         self._top_k = top_k
-        self.boxes = tf.placeholder(dtype='float32', shape=(None, 4))
-        self.scores = tf.placeholder(dtype='float32', shape=(None,))
-        self.nms = tf.image.non_max_suppression(self.boxes, self.scores,
+        # self.boxes = tf.placeholder(dtype='float32', shape=(None, 4))
+        # self.scores = tf.placeholder(dtype='float32', shape=(None,))
+        self.boxes = None
+        self.scores = None
+        # self.nms = tf.image.non_max_suppression(self.boxes, self.scores,
                                                 self._top_k,
                                                 iou_threshold=self._nms_thresh)
-        self.sess = tf.Session(config=tf.ConfigProto(device_count={'GPU': 0}))
+        # self.sess = tf.Session(config=tf.ConfigProto(device_count={'GPU': 0}))
 
     @property
     def nms_thresh(self):
@@ -41,9 +43,6 @@ class BBoxUtility(object):
     @nms_thresh.setter
     def nms_thresh(self, value):
         self._nms_thresh = value
-        self.nms = tf.image.non_max_suppression(self.boxes, self.scores,
-                                                self._top_k,
-                                                iou_threshold=self._nms_thresh)
 
     @property
     def top_k(self):
@@ -218,9 +217,12 @@ class BBoxUtility(object):
                 if len(c_confs[c_confs_m]) > 0:
                     boxes_to_process = decode_bbox[c_confs_m]
                     confs_to_process = c_confs[c_confs_m]
-                    feed_dict = {self.boxes: boxes_to_process,
-                                 self.scores: confs_to_process}
-                    idx = self.sess.run(self.nms, feed_dict=feed_dict)
+                    self.boxes = boxes_to_process
+                    self.scores = confs_to_process
+                    idx = tf.image.non_max_suppression(self.boxes, self.scores,
+                                                      self._top_k,
+                                                      iou_threshold=self._nms_thresh)
+                    idx = idx.numpy()
                     good_boxes = boxes_to_process[idx]
                     confs = confs_to_process[idx][:, None]
                     labels = c * np.ones((len(idx), 1))
