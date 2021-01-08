@@ -1,3 +1,10 @@
+#About
+独学用
+[こちらのサイト](https://techblog.cccmk.co.jp/entry/2020/05/11/094834)を参考にfork元をTensorFlow v2で動くように頑張ってる
+細かいことはfork元見て
+
+以下fork元のREADME
+
 [![license](https://img.shields.io/github/license/mashape/apistatus.svg)](LICENSE)
 # A port of [SSD: Single Shot MultiBox Detector](https://github.com/weiliu89/caffe/tree/ssd) to [Keras](https://keras.io) framework.
 For more details, please refer to [arXiv paper](http://arxiv.org/abs/1512.02325).
