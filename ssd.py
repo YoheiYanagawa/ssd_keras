@@ -306,6 +306,8 @@ def SSD300(input_shape, num_classes=21):
         num_boxes = net['mbox_loc']._keras_shape[-1] // 4
     elif hasattr(net['mbox_loc'], 'int_shape'):
         num_boxes = K.int_shape(net['mbox_loc'])[-1] // 4
+    else:
+        num_boxes = net['mbox_loc'].shape[-1] // 4
     net['mbox_loc'] = Reshape((num_boxes, 4),
                               name='mbox_loc_final')(net['mbox_loc'])
     net['mbox_conf'] = Reshape((num_boxes, num_classes),

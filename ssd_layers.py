@@ -1,8 +1,10 @@
 """Some special pupropse layers for SSD."""
 
 import tensorflow.keras.backend as K
-from tensorflow.keras.engine.topology import InputSpec
-from tensorflow.keras.engine.topology import Layer
+#from tensorflow.keras.engine.topology import InputSpec
+#from tensorflow.keras.engine.topology import Layer
+from tensorflow.keras.layers import InputSpec
+from tensorflow.keras.layers import Layer
 import numpy as np
 import tensorflow as tf
 
@@ -125,8 +127,10 @@ class PriorBox(Layer):
     def call(self, x, mask=None):
         if hasattr(x, '_shape_val'):
             input_shape = x._keras_shape
-        elif hasattr(K, 'int_shape'):
+        elif hasattr(x, '_keras_shape'):
             input_shape = K.int_shape(x)
+        else:
+            input_shape = x.shape
         layer_width = input_shape[self.waxis]
         layer_height = input_shape[self.haxis]
         img_width = self.img_size[0]
