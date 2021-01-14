@@ -126,7 +126,7 @@ class PriorBox(Layer):
 
     def call(self, x, mask=None):
         if hasattr(x, '_shape_val'):
-            input_shape = x._keras_shape
+            input_shape = x._shape_val
         elif hasattr(x, '_keras_shape'):
             input_shape = K.int_shape(x)
         else:
